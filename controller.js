@@ -5,8 +5,6 @@
 //const BASE_URL = "http://localhost:5000";
 const BASE_URL = "https://moseli01.pythonanywhere.com";
 
-const tmdb_id = null;
-
 // Handle Sign-Up form submission
 document.getElementById("signup-form").addEventListener("submit", async function(event) {
     event.preventDefault();
@@ -38,7 +36,7 @@ document.getElementById("signup-form").addEventListener("submit", async function
             const signupContainer = document.getElementById("signup-container");
             const errorMsg = document.createElement("p");
             errorMsg.innerHTML = "Username or email already in use";
-            errorMsg.classList.add("notification");
+            errorMsg.classList.add("notification")
             signupContainer.appendChild(errorMsg);
         });
 });
@@ -200,40 +198,14 @@ function loadItems(listId) {
 
 // Load all lists from the server and display them on the home page
 function loadLists() {
-
-    if (tmdb_id==null){
-        const tmdb_id = getTmdbList();
-    }
-
     fetch(`${BASE_URL}/lists`)
         .then(response => {
             if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
             return response.json();
         })
         .then(data => {
-
             const listGrid = document.getElementById('list-grid');
             listGrid.innerHTML = '';
-/*
-            const tmdblistItem = document.createElement('div');
-            tmdblistItem.classList.add('column', 'box');
-        
-            tmdblistItem.innerHTML = `
-                <article class="media">
-                    <div class="media-left">
-                        <img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_2-d537fb228cf3ded904ef09b136fe3fec72548ebc1fea3fbbd1ad9e36364db38b.svg" style='width: 120px;'> 
-                    </div>
-                    <div class="media-right">
-                        <h3 class="title is-4 list-link" onclick="loadItems(${tmdb_id})" >Popular Movies from TMDB</h3>
-                        <p>Created by: TopVotes</p>
-                        <button class="button is-warning" onclick="loadItems${tmdb_id})">Vote Now!</button>
-                    </div>
-                </article>
-            `;
-            
-            //listGrid.appendChild(tmdblistItem);
-*/
-
             console.log(data);
             const lists=data.lists;
             const images = data.images;
@@ -241,8 +213,7 @@ function loadLists() {
             console.log(lists);
             if (lists && lists.length > 0) {
                 lists.forEach(list => {
-
-                    if (i < 20 && list.name != "Popular Movies from TMDB"){
+                    if (i < 20){
                         const listItem = document.createElement('div');
                         listItem.classList.add('column', 'box');
 
@@ -439,96 +410,3 @@ document.addEventListener("DOMContentLoaded", function() {
 
         });
 });
-
-
-async function getPopMovies(){
-    const tmdb_url = "https://api.themoviedb.org/3/movie/popular?api_key=cc1d45cc4180f10a7cc26f4957dda315";
-
-    //if exists, delete list
-    
-
-    //create list
-    await fetch(`${BASE_URL}/tmdblist`, {
-        method: "POST",
-        credentials:"include",
-        mode: "cors"
-    }).then(response => {
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-        return response.json();
-
-    }).then(data => {
-        var tmdb_id = data.list_id;
-        console.log("created pop movie list");
-    })
-    .catch(error => console.error('Error:', error.message));
-    
-    //get items from tmdb
-    await fetch(tmdb_url,{
-        method: "GET",
-        mode: "cors"
-    }).then(response => response.json())
-    .then(data => {
-        data.results.forEach(itemData => {
-            const title = itemData["title"];
-            const image = "https://image.tmdb.org/t/p/w300" + itemData["poster_path"];
-            const overview = itemData["overview"];
-
-            console.log(title, image, overview);
-
-            //add to list
-            fetch(`${BASE_URL}/item/${tmdb_id}`, {
-                method: "POST",
-                body: JSON.stringify({ list_id: tmdb_id, name: title, image_link: image, description: overview }),
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            })
-        })
-    })
-    
-}
-
-function settmdbCookie(cname, cvalue, exdays) {
-    var d = new Date();
-    d.setTime(d.getTime() + (exdays*24*60*60*1000));
-    var expires = "expires="+d.toUTCString();
-    document.cookie = cname + "=" + cvalue + "; " + expires;
-    console.log("set cookie");
-}
-
-function getCookie(cname) {
-    var name = cname + "=";
-    var ca = document.cookie.split(';');
-    for(var i=0; i<ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1);
-        if (c.indexOf(name) != -1) return c.substring(name.length,c.length);
-    }
-    return "";
-}
-
-function checkCookie() {
-    var tmdb_cookie = getCookie("tmdb_list");
-    if (tmdb_cookie === "") { // Cookie not set
-        getPopMovies();
-        settmdbCookie("tmdb_list", "seen", 7);
-    }
-}
-
-async function getTmdbList(){
-    await fetch(`${BASE_URL}/findtmdblist`, {
-        method: "GET",
-        credentials:"include",
-        mode: "cors"
-    }).then(response => {
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-        return response.json();
-
-    }).then(data => {
-        const tmdb_id = data.list_id;
-        console.log(data.list_id);
-        return tmdb_id;
-
-    })
-    .catch(error => console.error('Error:', error.message));
-}

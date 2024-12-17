@@ -228,8 +228,4 @@ window.onload = function() {
     current_list = sessionStorage.getItem("current_list");
     updateView();
     displayPage(page_state);
-    if (tmdb_id==null){
-        const tmdb_id = getTmdbList();
-    }
-    checkCookie();
 }
