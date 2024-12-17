@@ -2,7 +2,8 @@
 
 
 
-const BASE_URL = "http://localhost:5000";
+//const BASE_URL = "http://localhost:5000";
+const BASE_URL = "https://moseli01.pythonanywhere.com/";
 
 // Handle Sign-Up form submission
 document.getElementById("signup-form").addEventListener("submit", async function(event) {
