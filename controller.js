@@ -338,8 +338,8 @@ function deleteItem(item_id){
         })
         .then(data => {
             console.log(data);
+            editList(sessionStorage.getItem("current_list"));
 
-            profile()
         })
         .catch(error => console.error('Error:', error.message));
 }
