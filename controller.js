@@ -33,8 +33,8 @@ document.getElementById("signup-form").addEventListener("submit", async function
         })
         .catch(error => {
             console.error('Error:', error.message);
-            signupContainer = document.getElementById("signup-container");
-            errorMsg = document.createElement("p");
+            const signupContainer = document.getElementById("signup-container");
+            const errorMsg = document.createElement("p");
             errorMsg.innerHTML = "Username or email already in use";
             signupContainer.appendChild(errorMsg);
         });
