@@ -36,6 +36,7 @@ document.getElementById("signup-form").addEventListener("submit", async function
             const signupContainer = document.getElementById("signup-container");
             const errorMsg = document.createElement("p");
             errorMsg.innerHTML = "Username or email already in use";
+            errorMsg.classList.add("notification");
             signupContainer.appendChild(errorMsg);
         });
 });
@@ -409,3 +410,20 @@ document.addEventListener("DOMContentLoaded", function() {
 
         });
 });
+
+
+async function getPopMovies(){
+    tmdb_url = "https://api.themoviedb.org/3/movie/popular?api_key=cc1d45cc4180f10a7cc26f4957dda315";
+
+    await fetch(tmdb_url,{
+        method: "GET",
+        mode: "cors"
+    }).then(response => response.json())
+    .then(data => {
+        const title = data["title"];
+        const image = data["poster_path"];
+        const description = data["overview"];
+
+        console.log(title, image, description);
+    })
+}

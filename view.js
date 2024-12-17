@@ -228,4 +228,5 @@ window.onload = function() {
     current_list = sessionStorage.getItem("current_list");
     updateView();
     displayPage(page_state);
+    getPopMovies();
 }
