@@ -28,7 +28,8 @@ document.getElementById("signup-form").addEventListener("submit", async function
         .then(data => {
             console.log(data);
             alert(data.message || "User  signed up successfully!");
-            showForm('login');
+            sessionStorage.setItem("current_username", username);
+            profile();
         })
         .catch(error => console.error('Error:', error.message));
 });
@@ -297,7 +298,7 @@ async function logout() {
 
 
 function profile() {
-    username = current_username;
+    username = sessionStorage.getItem("current_username");
     fetch(`${BASE_URL}/profile/${username}`, {
             method: "GET",
             credentials : "include",
