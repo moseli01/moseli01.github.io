@@ -31,7 +31,13 @@ document.getElementById("signup-form").addEventListener("submit", async function
             sessionStorage.setItem("current_username", username);
             profile();
         })
-        .catch(error => console.error('Error:', error.message));
+        .catch(error => {
+            console.error('Error:', error.message);
+            signupContainer = document.getElementById("signup-container");
+            errorMsg = document.createElement("p");
+            errorMsg.innerHTML = "Username or email already in use";
+            signupContainer.appendChild(errorMsg);
+        });
 });
 
 // Handle Login form submission
