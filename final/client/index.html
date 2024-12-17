@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TopVotes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="https://bulma.io/vendor/fontawesome-free-6.5.2-web/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="view.js" defer></script>
+    <script src="controller.js" defer></script>
+    <script src="model.js" defer></script>
+    
+    <link rel="icon" type="image/x-icono" href=".\static\TopVotesLogo.png">
+</head>
+
+<body>
+    <nav class="navbar is-primary">
+
+        <div class="navbar-brand">
+            <a class="navbar-item" href="#" onclick="showForm('home')">
+            <img src=".\static\TopVotesLogo-small.png" alt="TopVotes logo" style="height: 4em!important;"/>
+
+                <h1 class="title">TopVotes</h1>
+            </a>
+            <a class="navbar-item is-white" onclick="showForm('create-list')" id="create-logged-in" style="display: none">
+                <p class="has-text-weight-bold is-size-5">Create a List</p>
+            </a>
+            <a class="navbar-item is-white" onclick="showForm('signup')" id="create-logged-out" style="display: inherit">
+                <p class="has-text-weight-bold is-size-5">Create a List</p>
+            </a>
+   
+
+        </div>
+        <div class="navbar-end">
+            <a class="navbar-item" onclick="showForm('signup')" style="display:inherit" id="signupbtn">Sign Up</a>
+            <a class="navbar-item mr-6" onclick="showForm('login')" style="display:inherit" id="loginbtn">Log In</a>
+            <a class="navbar-item" onclick="logout()" style="display: none;" id="logoutbtn">Log Out</a>
+            <a class="navbar-item mr-6" onclick="profile()" style="display: none;" id="profilebtn">Profile</a>
+        </div>
+    </nav>
+
+    <section class="section">
+        <div class="container">
+            <!-- Sign-up Form -->
+            <div id="signup-container" class="box" style="display: none;">
+                <h2 class="subtitle">Sign up to create a list</h2>
+                <form id="signup-form">
+                    <div class="field">
+                        <label class="label" for="email">Email</label>
+                        <div class="control">
+                            <input class="input" type="email" id="email" required>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label" for="username">Username</label>
+                        <div class="control">
+                            <input class="input" type="text" id="username" required>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label" for="password">Password</label>
+                        <div class="control">
+                            <input class="input" type="password" id="password" required>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="control">
+                            <button class="button is-primary" type="submit">Sign Up</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Login Form -->
+            <div id="login-container" class="box" style="display: none;">
+                <h2 class="subtitle">Login</h2>
+                <form id="login-form">
+                    <div class="field">
+                        <label class="label" for="login-email">Email</label>
+                        <div class="control">
+                            <input class="input" type="email" id="login-email" required>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label" for="login-password">Password</label>
+                        <div class="control">
+                            <input class="input" type="password" id="login-password" required>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="control">
+                            <button class="button is-primary" type="submit">Login</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Create List Form -->
+            <div id="new-list-container" class="box" style="display: none;">
+                <h2 class="subtitle">Create a List</h2>
+                <form id="new-list-form">
+                    <div class="field">
+                        <label class="label" for="list-title">List Title</label>
+                        <div class="control">
+                            <input class="input" type="text" id="list-title" required>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="control">
+                            <button class="button is-primary is-fullwidth" type="submit" onclick="showForm('add-item')">Create List</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Edit List Form -->
+            <div id="edit-list-container" class="box" style="display: none;">
+            <div class="columns">
+            <div class="column">
+                <h2 class="title" id="list-name-edit"></h2>
+                <h2 class="subtitle">Edit List</h2>
+                    <form id="edit-list-form">
+                        <input type="hidden" id="edit-list-id">
+                        <div class="field">
+                            <label class="label" for="edit-list-title">Change List Title</label>
+                            <div class="control">
+                                <input class="input" type="text" id="edit-list-title" required>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="control">
+                                <button class="button is-primary" type="submit">Update</button>
+                            </div>
+                        </div>
+                    </form>
+                    
+                    <!-- Add Item to List -->
+                  
+                    <div id="add-item-container" class="block" style="display: none;">
+                            <h2 class="title" id="list-name-add"></h2>
+                            <h2 class="subtitle" >Add an Item</h2>
+                        
+                            <form id="new-item-form">
+                                <div class="field">
+                                    <label class="label" for="name">Name</label>
+                                    <div class="control">
+                                        <input class="input" type="text" id="name" required>
+                                    </div>
+                                </div>
+                                <p>Search for images & paste the image link below</p>
+                                <script async src="https://cse.google.com/cse.js?cx=502c13c2dba334ef0">
+                                </script>
+                                <div class="gcse-search"></div>
+                                <div class="field">
+                                    <label class="label" for="image_link">Image Link</label>
+                                    <div class="control">
+                                        <input class="input" type="text" id="image_link" required>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="label" for="description">Description</label>
+                                    <div class="control">
+                                        <input class="input" type="text" id="description" required>
+                                    </div>
+                                </div>
+                            
+                            <div class="field">
+                                <div class="control">
+                                    <button class="button is-primary" type="submit">Add Item</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="column">
+                    <p class="subtitle">Current items</p>
+                
+                    <div class="grid">
+                        <div class="fixed-grid has-1-cols" id="edit-list-grid">
+            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            
+
+            <div id="home-page-container" class="box" >
+
+                <h2 class="title" id="list-name"></h2>
+                <h2 class="subtitle">New Lists</h2>
+                <div class="grid">
+                    <div class="fixed-grid has-1-cols" id="list-grid">
+                        
+                    </div>
+                </div>
+            </div>
+
+            <div id="view-list-container" class="box" >
+                <h2 class="title" id="list-name-view"></h2>
+                <div class="grid">
+                    <div class="fixed-grid has-1-cols" id="list-item-grid">
+
+                    </div>
+                </div>
+            </div>
+
+            <div id="profile-container" class="box" style="display: none;">
+                <h2 class="title" id="this_username"></h2>
+                <h2 class="subtitle">Lists you've created</h2>
+                <div class="grid">
+                    <div class="fixed-grid has-1-cols" id="user-lists">
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <script>
+        // Load all lists from the server and display them on the home page
+        document.addEventListener('DOMContentLoaded', () => {
+            loadLists(); // Call the function to load lists on page load
+        });
+    </script>
+
+</body>
+</html>

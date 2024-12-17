@@ -1,0 +1,159 @@
+/* Base Styles */
+body {
+    background-color: #eef2f7;
+    font-family: 'Roboto', Arial, sans-serif;
+    padding-top: 20px;
+    color: #4a4a4a;
+    line-height: 1.6;
+}
+
+/* Navbar */
+.navbar {
+    margin-bottom: 20px;
+    background-color: #1e293b;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-item h1 {
+    font-size: 2.5rem;
+    color: #fff;
+    font-weight: bold;
+    margin: 0;
+    transition: color 0.3s ease;
+}
+
+.navbar-item h1:hover {
+    color: #ffdd57;
+}
+
+/* Sections */
+.section {
+    padding: 40px 20px;
+}
+
+.section .title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2a3b4d;
+    margin-bottom: 20px;
+}
+
+.box {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.box img {
+    margin-bottom: 10px;
+    border-radius: 8px;
+}
+
+form .input {
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #dfe3e6;
+    border-radius: 6px;
+    transition: border-color 0.3s ease;
+}
+
+form .input:focus {
+    border-color: #3273dc;
+    outline: none;
+    box-shadow: 0 0 4px rgba(50, 115, 220, 0.2);
+}
+
+button {
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button.is-primary {
+    background-color: #3273dc;
+    border-color: #3273dc;
+    color: white;
+}
+
+button.is-primary:hover {
+    background-color: #275b9c;
+}
+
+button.is-link {
+    background-color: #23d160;
+    border-color: #23d160;
+    color: white;
+}
+
+button.is-link:hover {
+    background-color: #1eac51;
+}
+
+button.is-danger {
+    background-color: #ff3860;
+    border-color: #ff3860;
+    color: white;
+}
+
+button.is-danger:hover {
+    background-color: #d9294a;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+button.is-fullwidth {
+    width: 100%;
+}
+
+input.myradio-up {
+    background-color: #485fc7;
+    width: 6em;
+    border-radius: 6px;
+}
+
+input.myradio-up:checked {
+    background-color: #b6bee3;
+
+}
+
+input.myradio-down {
+    background-color: #f14668;
+    width: 7em;
+    border-radius: 6px;
+}
+
+input.myradio-down:checked {
+    background-color: #f394a7;
+
+}
+
+label span:first-of-type {
+    position: relative;
+    left: -5em;
+    font-size: 15px;
+    color: #ffffff;
+    top: -1em;
+
+  }
+
+label span.lbl-down {
+    left: -6em!important;
+}
+  
+h3.list-link:hover {
+    text-decoration: underline;
+}
