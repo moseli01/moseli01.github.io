@@ -198,14 +198,38 @@ function loadItems(listId) {
 
 // Load all lists from the server and display them on the home page
 function loadLists() {
+
+    
+
     fetch(`${BASE_URL}/lists`)
         .then(response => {
             if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
             return response.json();
         })
         .then(data => {
+
             const listGrid = document.getElementById('list-grid');
             listGrid.innerHTML = '';
+
+            const tmdblistItem = document.createElement('div');
+            tmdblistItem.classList.add('column', 'box');
+        
+            tmdblistItem.innerHTML = `
+                <article class="media">
+                    <div class="media-left">
+                        <img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_2-d537fb228cf3ded904ef09b136fe3fec72548ebc1fea3fbbd1ad9e36364db38b.svg" style='width: 120px;'> 
+                    </div>
+                    <div class="media-right">
+                        <h3 class="title is-4 list-link" onclick="loadItems(999)" >Popular Movies from TMDB</h3>
+                        <p>Created by: TopVotes</p>
+                        <button class="button is-warning" onclick="loadItems(999)">Vote Now!</button>
+                    </div>
+                </article>
+            `;
+            
+            listGrid.appendChild(tmdblistItem);
+
+
             console.log(data);
             const lists=data.lists;
             const images = data.images;
@@ -213,7 +237,8 @@ function loadLists() {
             console.log(lists);
             if (lists && lists.length > 0) {
                 lists.forEach(list => {
-                    if (i < 20){
+
+                    if (i < 20 && list.id != 999){
                         const listItem = document.createElement('div');
                         listItem.classList.add('column', 'box');
 
@@ -434,10 +459,10 @@ async function getPopMovies(){
         mode: "cors"
     }).then(response => response.json())
     .then(data => {
-        data.items.forEach(itemData => {
-            const title = data["title"];
-            const image = "https://image.tmdb.org/t/p/w300" + data["poster_path"];
-            const overview = data["overview"];
+        data.results.forEach(itemData => {
+            const title = itemData["title"];
+            const image = "https://image.tmdb.org/t/p/w300" + itemData["poster_path"];
+            const overview = itemData["overview"];
 
             console.log(title, image, overview);
 
@@ -451,6 +476,31 @@ async function getPopMovies(){
             })
         })
     })
-
     
+}
+
+function settmdbCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+d.toUTCString();
+    document.cookie = cname + "=" + cvalue + "; " + expires;
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(name) != -1) return c.substring(name.length,c.length);
+    }
+    return "";
+}
+
+function checkCookie() {
+    var tmdb_cookie = getCookie("tmdb_list");
+    if (tmdb_cookie === "") { // Cookie not set
+        getPopMovies();
+        settmdbCookie("tmdb_list", "seen", 7);
+    }
 }
