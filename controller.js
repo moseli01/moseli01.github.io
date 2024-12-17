@@ -95,7 +95,7 @@ document.getElementById("new-list-form").addEventListener("submit", async functi
             current_list = data.list_id;
             sessionStorage.setItem("current_list", current_list);
             showForm('add-item');
-            document.getElementById('list-name').textContent = listTitle; 
+            document.getElementById('list-name-edit').textContent = listTitle; 
         })
         .catch(error => console.error('Error:', error.message));
 
