@@ -415,15 +415,42 @@ document.addEventListener("DOMContentLoaded", function() {
 async function getPopMovies(){
     const tmdb_url = "https://api.themoviedb.org/3/movie/popular?api_key=cc1d45cc4180f10a7cc26f4957dda315";
 
+    //if exists, delete list
+    deleteList(999);
+    //create list
+    await fetch(`${BASE_URL}/tmdblist`, {
+        method: "POST",
+        credentials:"include",
+        mode: "cors"
+    }).then(response => {
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        return response.json();
+    })
+    .catch(error => console.error('Error:', error.message));
+    
+    //get items from tmdb
     await fetch(tmdb_url,{
         method: "GET",
         mode: "cors"
     }).then(response => response.json())
     .then(data => {
-        const title = data["title"];
-        const image = "https://image.tmdb.org/t/p/w300" + data["poster_path"];
-        const description = data["overview"];
+        data.items.forEach(itemData => {
+            const title = data["title"];
+            const image = "https://image.tmdb.org/t/p/w300" + data["poster_path"];
+            const overview = data["overview"];
 
-        console.log(title, image, description);
+            console.log(title, image, overview);
+
+            //add to list
+            fetch(`${BASE_URL}/item/999`, {
+                method: "POST",
+                body: JSON.stringify({ list_id: 999, name: title, image_link: image, description: overview }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
+        })
     })
+
+    
 }
