@@ -5,6 +5,8 @@
 //const BASE_URL = "http://localhost:5000";
 const BASE_URL = "https://moseli01.pythonanywhere.com";
 
+const tmdb_id = null;
+
 // Handle Sign-Up form submission
 document.getElementById("signup-form").addEventListener("submit", async function(event) {
     event.preventDefault();
@@ -199,7 +201,9 @@ function loadItems(listId) {
 // Load all lists from the server and display them on the home page
 function loadLists() {
 
-    
+    if (tmdb_id==null){
+        const tmdb_id = getTmdbList();
+    }
 
     fetch(`${BASE_URL}/lists`)
         .then(response => {
@@ -210,7 +214,7 @@ function loadLists() {
 
             const listGrid = document.getElementById('list-grid');
             listGrid.innerHTML = '';
-
+/*
             const tmdblistItem = document.createElement('div');
             tmdblistItem.classList.add('column', 'box');
         
@@ -220,15 +224,15 @@ function loadLists() {
                         <img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_2-d537fb228cf3ded904ef09b136fe3fec72548ebc1fea3fbbd1ad9e36364db38b.svg" style='width: 120px;'> 
                     </div>
                     <div class="media-right">
-                        <h3 class="title is-4 list-link" onclick="loadItems(999)" >Popular Movies from TMDB</h3>
+                        <h3 class="title is-4 list-link" onclick="loadItems(${tmdb_id})" >Popular Movies from TMDB</h3>
                         <p>Created by: TopVotes</p>
-                        <button class="button is-warning" onclick="loadItems(999)">Vote Now!</button>
+                        <button class="button is-warning" onclick="loadItems${tmdb_id})">Vote Now!</button>
                     </div>
                 </article>
             `;
             
-            listGrid.appendChild(tmdblistItem);
-
+            //listGrid.appendChild(tmdblistItem);
+*/
 
             console.log(data);
             const lists=data.lists;
@@ -238,7 +242,7 @@ function loadLists() {
             if (lists && lists.length > 0) {
                 lists.forEach(list => {
 
-                    if (i < 20 && list.id != 999){
+                    if (i < 20 && list.name != "Popular Movies from TMDB"){
                         const listItem = document.createElement('div');
                         listItem.classList.add('column', 'box');
 
@@ -441,7 +445,8 @@ async function getPopMovies(){
     const tmdb_url = "https://api.themoviedb.org/3/movie/popular?api_key=cc1d45cc4180f10a7cc26f4957dda315";
 
     //if exists, delete list
-    deleteList(999);
+    
+
     //create list
     await fetch(`${BASE_URL}/tmdblist`, {
         method: "POST",
@@ -450,6 +455,10 @@ async function getPopMovies(){
     }).then(response => {
         if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
         return response.json();
+
+    }).then(data => {
+        var tmdb_id = data.list_id;
+        console.log("created pop movie list");
     })
     .catch(error => console.error('Error:', error.message));
     
@@ -467,9 +476,9 @@ async function getPopMovies(){
             console.log(title, image, overview);
 
             //add to list
-            fetch(`${BASE_URL}/item/999`, {
+            fetch(`${BASE_URL}/item/${tmdb_id}`, {
                 method: "POST",
-                body: JSON.stringify({ list_id: 999, name: title, image_link: image, description: overview }),
+                body: JSON.stringify({ list_id: tmdb_id, name: title, image_link: image, description: overview }),
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -484,6 +493,7 @@ function settmdbCookie(cname, cvalue, exdays) {
     d.setTime(d.getTime() + (exdays*24*60*60*1000));
     var expires = "expires="+d.toUTCString();
     document.cookie = cname + "=" + cvalue + "; " + expires;
+    console.log("set cookie");
 }
 
 function getCookie(cname) {
@@ -503,4 +513,22 @@ function checkCookie() {
         getPopMovies();
         settmdbCookie("tmdb_list", "seen", 7);
     }
+}
+
+async function getTmdbList(){
+    await fetch(`${BASE_URL}/findtmdblist`, {
+        method: "GET",
+        credentials:"include",
+        mode: "cors"
+    }).then(response => {
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        return response.json();
+
+    }).then(data => {
+        const tmdb_id = data.list_id;
+        console.log(data.list_id);
+        return tmdb_id;
+
+    })
+    .catch(error => console.error('Error:', error.message));
 }
