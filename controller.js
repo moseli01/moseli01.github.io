@@ -413,7 +413,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 async function getPopMovies(){
-    tmdb_url = "https://api.themoviedb.org/3/movie/popular?api_key=cc1d45cc4180f10a7cc26f4957dda315";
+    const tmdb_url = "https://api.themoviedb.org/3/movie/popular?api_key=cc1d45cc4180f10a7cc26f4957dda315";
 
     await fetch(tmdb_url,{
         method: "GET",
@@ -421,7 +421,7 @@ async function getPopMovies(){
     }).then(response => response.json())
     .then(data => {
         const title = data["title"];
-        const image = data["poster_path"];
+        const image = "https://image.tmdb.org/t/p/w300" + data["poster_path"];
         const description = data["overview"];
 
         console.log(title, image, description);
